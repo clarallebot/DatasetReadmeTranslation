@@ -1,0 +1,229 @@
+{
+    "id": "5138jn655",
+    "create_date": "2020-11-03T18:06:41.636+00:00",
+    "modified_date": "2020-11-10T22:11:37.034+00:00",
+    "head": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655/list_source#g47435468060340"
+        }
+    ],
+    "tail": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655/list_source#g47435430532620"
+        }
+    ],
+    "depositor": "deszoeks",
+    "title": [
+        "Sea surface temperature from multiple in situ sensors on MISO-BOB 2019 research cruise"
+    ],
+    "date_uploaded": "2020-11-03T10:06:40.687-08:00",
+    "date_modified": "2020-11-10T14:11:36.794-08:00",
+    "state": {
+        "id": "http://fedora.info/definitions/1/0/access/ObjState#active"
+    },
+    "proxy_depositor": null,
+    "on_behalf_of": "",
+    "arkivo_checksum": null,
+    "owner": null,
+    "nested_ordered_abstract": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_ordered_abstractg69852225935840",
+            "index": [
+                "0"
+            ],
+            "abstract": [
+                "Sea surface temperature (SST) was measured by several instruments deployed from the research vessel Sally Ride in the Bay of Bengal for the Monsoon Intraseasonal Oscillations in the Bay of Bengal (MISO-BOB) 2019 field experiment. This data set presents 1 minute averages of 3 m SST from the Scripps Institution of Oceanography Fast Current-Temperature-Depth sounder (FCTD), 0.2 m SST from the Oregon State University SurfOtter, and 0.1 m SST from a sensor attached to a floating sea snake constructed by the NOAA Physical Sciences Laboratory. Raw 2 s^-1 samples of the sea snake SST are also presented."
+            ]
+        }
+    ],
+    "abstract": [
+        "Sea surface temperature (SST) was measured by several instruments deployed from the research vessel Sally Ride in the Bay of Bengal for the Monsoon Intraseasonal Oscillations in the Bay of Bengal (MISO-BOB) 2019 field experiment. This data set presents 1 minute averages of 3 m SST from the Scripps Institution of Oceanography Fast Current-Temperature-Depth sounder (FCTD), 0.2 m SST from the Oregon State University SurfOtter, and 0.1 m SST from a sensor attached to a floating sea snake constructed by the NOAA Physical Sciences Laboratory. Raw 2 s^-1 samples of the sea snake SST are also presented."
+    ],
+    "academic_affiliation": [
+        "http://opaquenamespace.org/ns/osuAcademicUnits/aCtPf2DZ"
+    ],
+    "nested_ordered_additional_information": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_ordered_additional_informationg69852225796860",
+            "index": [
+                "0"
+            ],
+            "additional_information": [
+                "Formatted in NetCDF (https://www.unidata.ucar.edu/software/netcdf/)"
+            ]
+        }
+    ],
+    "additional_information": [
+        "Formatted in NetCDF (https://www.unidata.ucar.edu/software/netcdf/)"
+    ],
+    "alt_title": [],
+    "based_near": [
+        {
+            "id": "https://sws.geonames.org/1281789/",
+            "parentADM1": [],
+            "parentADM2": [],
+            "parentADM3": [],
+            "parentADM4": [],
+            "parentCountry": [],
+            "featureCode": []
+        }
+    ],
+    "bibliographic_citation": [
+        "de Szoeke, S. P. (2020) Sea surface temperature from multiple in situ sensors on MISO-BOB 2019 research cruise (Version 1) [Dataset]. Oregon State University. https://doi.org/10.7267/5138jn655"
+    ],
+    "conference_location": null,
+    "conference_name": null,
+    "conference_section": null,
+    "nested_ordered_contributor": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_ordered_contributorg69852226202380",
+            "index": [
+                "1"
+            ],
+            "contributor": [
+                "Shroyer, Emily"
+            ]
+        },
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_ordered_contributorg69852198894240",
+            "index": [
+                "0"
+            ],
+            "contributor": [
+                "Lucas, Drew J."
+            ]
+        }
+    ],
+    "contributor": [
+        "Lucas, Drew J.",
+        "Shroyer, Emily"
+    ],
+    "contributor_advisor": [],
+    "creator": [
+        "de Szoeke, Simon P."
+    ],
+    "date_accepted": null,
+    "date_available": null,
+    "date_collected": [],
+    "date_copyright": null,
+    "date_created": null,
+    "date_issued": "2020-11-03",
+    "date_reviewed": [],
+    "date_valid": null,
+    "degree_field": [],
+    "degree_level": null,
+    "degree_name": [],
+    "description": [],
+    "digitization_spec": [],
+    "doi": "https://doi.org/10.7267/5138jn655",
+    "dspace_collection": [],
+    "dspace_community": [],
+    "embargo_reason": null,
+    "file_extent": [],
+    "file_format": [],
+    "funding_body": [],
+    "funding_statement": [
+        "Support for the MISO-BOB field experiment was provided by the US Office of Naval Research"
+    ],
+    "hydrologic_unit_code": [],
+    "identifier": [],
+    "identifier_uri": [],
+    "import_url": null,
+    "in_series": [],
+    "isbn": [],
+    "issn": [],
+    "keyword": [],
+    "label": null,
+    "language": [
+        "http://id.loc.gov/vocabulary/iso639-2/eng"
+    ],
+    "license": [
+        "http://creativecommons.org/licenses/by/4.0/"
+    ],
+    "nested_geo": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_geog70207638977440",
+            "label": [
+                "MISO-BOB 2019 leg 2 survey area"
+            ],
+            "point": [],
+            "bbox": [
+                "17.1 N,80 E,13 N,90 E"
+            ]
+        }
+    ],
+    "nested_related_items": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_related_itemsg69852225660640",
+            "label": [
+                ""
+            ],
+            "related_url": [
+                ""
+            ],
+            "index": [
+                "0"
+            ]
+        },
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_related_itemsg47246880165220",
+            "label": [
+                ""
+            ],
+            "related_url": [
+                ""
+            ],
+            "index": [
+                "0"
+            ]
+        }
+    ],
+    "nested_ordered_creator": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_ordered_creatorg69852199525580",
+            "index": [
+                "0"
+            ],
+            "creator": [
+                "de Szoeke, Simon P."
+            ]
+        }
+    ],
+    "nested_ordered_title": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/51/38/jn/65/5138jn655#nested_ordered_titleg69852199152620",
+            "index": [
+                "0"
+            ],
+            "title": [
+                "Sea surface temperature from multiple in situ sensors on MISO-BOB 2019 research cruise"
+            ]
+        }
+    ],
+    "other_affiliation": [],
+    "part_of": [
+        {
+            "id": "http://127.0.0.1:8080/fcrepo/rest/prod/k6/43/b1/16/k643b116n"
+        }
+    ],
+    "peerreviewed": "FALSE",
+    "publisher": [
+        "Oregon State University"
+    ],
+    "related_url": [],
+    "relative_path": null,
+    "replaces": null,
+    "resource_type": [
+        "Dataset"
+    ],
+    "rights_statement": [
+        "http://rightsstatements.org/vocab/NoC-US/1.0/"
+    ],
+    "source": [],
+    "subject": [
+        "Ocean temperature"
+    ],
+    "tableofcontents": [],
+    "documentation": [],
+    "version": "W/\"a905d2f94a0bee626dd3328440774213b8c63852\""
+}
