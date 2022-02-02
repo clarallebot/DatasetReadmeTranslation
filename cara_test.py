@@ -14,7 +14,11 @@ license_tree = html.fromstring(license_page.content)
 license_title = license_tree.xpath('//span[@class="cc-license-title"]/text()')[0]
 license_id = license_tree.xpath('//span[@class="cc-license-identifier"]/text()')[0]
 license_id = license_id.replace('\n','')
-    
+
+rights_page = requests.get(data['rights_statement'][0])
+rights_tree = html.fromstring(rights_page.content)
+rights_status = rights_tree.xpath('//div[@class="statement-textcolumn"]/h1/text()')[0]
+
 
 text = (
     f"""
@@ -54,7 +58,8 @@ SHARING/ACCESS INFORMATION
 --------------------------
 
 1. Licenses/restrictions placed on the data:
-This work is licensed under a Creative Commons {license_title} license {license_id}. {data['license'][0]}
+This work is licensed under a Creative Commons {license_title} license {license_id}. More information: {data['license'][0]}
+The copyright status for this work is {rights_status}. More information: {data['rights_statement'][0]}
     """
     )
 
