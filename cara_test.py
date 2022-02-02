@@ -1,23 +1,22 @@
 from datetime import date
+from lxml import html
 import json
 import requests
-from lxml import html
 
 today = date.today()
-today = today.strftime("%Y-%m-%d")
+today = today.strftime('%Y-%m-%d')
 
 with open('example_data.json') as json_file:
     data = json.load(json_file)
 
 license_page = requests.get(data['license'][0])
 license_tree = html.fromstring(license_page.content)
-license_source = "Creative Commons"
-license_title = license_tree.xpath("//span[@class='cc-license-title']/text()")[0]
-license_id = license_tree.xpath("//span[@class='cc-license-identifier']/text()")[0]
+license_title = license_tree.xpath('//span[@class="cc-license-title"]/text()')[0]
+license_id = license_tree.xpath('//span[@class="cc-license-identifier"]/text()')[0]
+license_id = license_id.replace('\n','')
     
 
 text = (
-    # header
     f"""
 [Instructions in this document are in between brackets.]
 [Dates in this document should use the format YYYY-MM-DD.]
@@ -31,11 +30,11 @@ text = (
 [For questions or guidance about using this template contact researchdataservices@oregonstate.edu]
 [This template is published under a CC0 license. You are free to reuse, redistribute and modify this template as you wish.]
 
-This documentation file was generated on {today}.
+This documentation file was generated automatically by ScholarsArchive@OSU on {today}.
 
----------------------
-# GENERAL INFORMATION
----------------------
+-------------------
+GENERAL INFORMATION
+-------------------
 
 1. Title of Dataset
 {data['title'][0]}
@@ -55,7 +54,7 @@ SHARING/ACCESS INFORMATION
 --------------------------
 
 1. Licenses/restrictions placed on the data:
-This work is licensed under a {license_source} {license_title} license {license_id}. {data['license'][0]}
+This work is licensed under a Creative Commons {license_title} license {license_id}. {data['license'][0]}
     """
     )
 
