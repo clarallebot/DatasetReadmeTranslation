@@ -17,12 +17,15 @@ print("-------------------")
 print ("# GENERAL INFORMATION")
 print("-------------------")
 
+#-----------Title
 print("1. Title of Dataset - REQUIRED")
-print(data['title'])
+print(data['title'][0])
 print("")
+
+#-----------Creator
 print("2. Creator Information - REQUIRED")
 
-if len(data['creator']) > 1:
+if len(data['creator']) > 0:
   nestcreator = data['nested_ordered_creator']
 
   ordered_creator = [None] * len(nestcreator)
@@ -31,8 +34,88 @@ if len(data['creator']) > 1:
 
   for x in ordered_creator:
     print("Name:",x)
-elif len(data['creator']) == 1: 
-  print("Name:",data['creator'][0])
+    print("Institution:")
+    print("College, School or Department:")
+    print("Address:")
+    print("Email:")
+    print("ORCID:")
+    print("Role:")
+    print("")
+
+#elif len(data['creator']) == 1: 
+#  print("Name:",data['creator'][0])
+#  print("Institution:")
+#  print("College, School or Department:")
+#  print("Address:")
+#  print("Email:")
+#  print("ORCID:")
+#  print("Role:")
+#  print("")
+
+#-----------Contributor
+print("3. Contributor Information")
+if len(data['contributor']) > 0:
+  nestcontributor = data['nested_ordered_contributor']
+
+  ordered_contributor = [None] * len(nestcontributor)
+  for x in nestcontributor:
+    ordered_contributor[int(x['index'][0])] = x['contributor'][0]
+
+  for x in ordered_contributor:
+    print("Name:",x)
+    print("Institution:")
+    print("College, School or Department:")
+    print("Address:")
+    print("Email:")
+    print("ORCID:")
+    print("Role:")
+    print("")
+
+elif len(data['contributor']) == 0:
+  print("No contributors")
+  print("")
+
+#-----------Contact information
+print("3. Contact Information - REQUIRED ")
+print("Name:",x)
+print("Institution:")
+print("College, School or Department:")
+print("Address:")
+print("Email:")
+print("ORCID:")
+print("")
+
+print("-------------------")
+print ("# CONTEXTUAL INFORMATION")
+print("-------------------")
+
+#-----------Abstract
+print("1. Abstract for the dataset - REQUIRED")
+
+if len(data['abstract']) > 0:
+  nestabstract = data['nested_ordered_abstract']
+
+  ordered_abstract = [None] * len(nestabstract)
+  for x in nestabstract:
+    ordered_abstract[int(x['index'][0])] = x['abstract'][0]
+
+  for x in ordered_abstract:
+    print(x)
+    print("")
+
+#-----------Abstract
+print("2. Context of the research project that this dataset was collected for.")
+print("")
+
+#-----------Date of data collection
+print("3. Date of data collection:")
+if len(data['date_collected']) > 0:
+  print(data['date_collected'][0])
+
+elif len(data['date_collected']) == 0:
+  print("NA")
+
+print("")
 
 
 
