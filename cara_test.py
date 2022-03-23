@@ -9,18 +9,24 @@ today = today.strftime('%Y-%m-%d')
 with open('example_data.json') as json_file:
     data = json.load(json_file)
 
-license_page = requests.get(data['license'][0])
+affiliation_uri = "https://opaquenamespace.org/ns/osuAcademicUnits/aCtPf2DZ"
+affiliation_page = requests.get(affiliation_uri)
+affiliation_tree = html.fromstring(affiliation_page.text)
+affiliation_label = affiliation_tree.xpath('//h2/text()')
+
+license_uri = data['license'][0]
+license_page = requests.get(license_uri)
 license_tree = html.fromstring(license_page.content)
-license_title = license_tree.xpath('//span[@class="cc-license-title"]/text()')[0]
+license_label = "Creative Commons " + license_tree.xpath('//span[@class="cc-license-title"]/text()')[0]
 license_id = license_tree.xpath('//span[@class="cc-license-identifier"]/text()')[0]
 license_id = license_id.replace('\n','')
 
-rights_page = requests.get(data['rights_statement'][0])
+rights_uri = data['rights_statement'][0]
+rights_page = requests.get(rights_uri)
 rights_tree = html.fromstring(rights_page.content)
-rights_status = rights_tree.xpath('//div[@class="statement-textcolumn"]/h1/text()')[0]
+rights_label = rights_tree.xpath('//div[@class="statement-textcolumn"]/h1/text()')[0]
 
-
-text = (
+template = (
     f"""
 [Instructions in this document are in between brackets.]
 [Dates in this document should use the format YYYY-MM-DD.]
@@ -40,29 +46,37 @@ This documentation file was generated automatically by ScholarsArchive@OSU on {t
 GENERAL INFORMATION
 -------------------
 
-1. Title of Dataset
+1. Title of Dataset - REQUIRED
 {data['title'][0]}
    
-2. Creator Information
-[Fill in the names and information about the researchers that are considered authors of this dataset. ]
+2. Creator Information - REQUIRED
+[Fill in the names and information about the researchers that are considered authors of this dataset.]
 [ORCID is a persistent digital identifier for researchers. https://orcid.org/ We encourage researchers to get one, but it is optional. You may chose to use a different author identifier if you have one.]
 [Role: role of the author in the dataset. Consider using the CreDit taxonomy to describe these roles: http://credit.niso.org/contributor-roles-defined/]
-[Creators are mentioned when citing the dataset. Make sure that they coincide with the Creator field in the repository record]
+[Creators are mentioned when citing the dataset. Make sure that they coincide with the Creator field in the repository record.]
 
 Name: {data['creator'][0]}
+Institution:
+College, School or Department: {affiliation_tree}
+Address:
+Email:
+ORCID:
+Role:
 
-...\n...\n...\n...\n
+...\n...\n...\n...
 
 --------------------------
 SHARING/ACCESS INFORMATION
 --------------------------
 
 1. Licenses/restrictions placed on the data:
-This work is licensed under a Creative Commons {license_title} license {license_id}. More information: {data['license'][0]}
-The copyright status for this work is {rights_status}. More information: {data['rights_statement'][0]}
+This work is licensed under a {license_label} license {license_id}. More information: {license_uri}
+The copyright status for this work is {rights_label}. More information: {rights_uri}
+
+...\n...\n...\n...
     """
     )
 
 with open('output_readme.txt', 'w') as readme:
-    readme.write(text)
+    readme.write(template)
 
