@@ -9,11 +9,20 @@ today = today.strftime('%Y-%m-%d')
 with open('example_data.json') as json_file:
     data = json.load(json_file)
 
-affiliation_uri = "https://opaquenamespace.org/ns/osuAcademicUnits/aCtPf2DZ"
-affiliation_page = requests.get(affiliation_uri)
-affiliation_tree = html.fromstring(affiliation_page.text)
-affiliation_label = affiliation_tree.xpath('//h2/text()')
+# Pull label from Academic Affiliation URI to use in Creator - College, School, or Department
+affiliation_uri = data['academic_affiliation'][0]
+jsonld = 'http://opaquenamespace.org/ns/osuAcademicUnits.jsonld'
+response = requests.get(jsonld)
+affiliation_dict = response.json()
+affiliation_dict = affiliation_dict['@graph']
+record = None
+for unit in affiliation_dict:
+    if unit['@id'] == affiliation_uri:
+        record = unit
+label_dict = record['rdfs:label']
+affiliation_label = label_dict['@value']
 
+# Pull label from License URI
 license_uri = data['license'][0]
 license_page = requests.get(license_uri)
 license_tree = html.fromstring(license_page.content)
@@ -21,6 +30,7 @@ license_label = "Creative Commons " + license_tree.xpath('//span[@class="cc-lice
 license_id = license_tree.xpath('//span[@class="cc-license-identifier"]/text()')[0]
 license_id = license_id.replace('\n','')
 
+# Pull label from Rights Statement URI
 rights_uri = data['rights_statement'][0]
 rights_page = requests.get(rights_uri)
 rights_tree = html.fromstring(rights_page.content)
@@ -57,7 +67,7 @@ GENERAL INFORMATION
 
 Name: {data['creator'][0]}
 Institution:
-College, School or Department: {affiliation_tree}
+College, School or Department: {affiliation_label}
 Address:
 Email:
 ORCID:
