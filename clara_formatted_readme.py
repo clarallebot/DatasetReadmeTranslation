@@ -12,7 +12,6 @@ with open('example_data2.json') as json_file:
     data = json.load(json_file)
 
 
-
 template = (
     f"""
 [Instructions in this document are in between brackets.]
@@ -125,6 +124,39 @@ if len(data['abstract']) > 0:
   	f""" {template} 
 {x}
     """)
+
+template = (
+    f"""{template}
+2. Context of the research project that this dataset was collected for.
+[Any contextual information that will help to interpret the dataset. You can give details about the research questions that prompted the collection of this dataset. ]
+
+
+3. Date of data collection:
+[single date or range of dates in format YYYY-MM-DD]
+
+""")
+if len(data['date_collected']) > 0:
+	template = (
+  	f""" {template} 
+{data['date_collected'][0]}
+    """)
+
+template = (
+    f"""{template}
+
+4. Geographic location of data collection:
+[Location of the data collection.]
+[If you include coordinates use format: "latitude, longitude" where latitude and longitude are preferably in fraction of degrees (a decimal number), not sexagesimal, and where north latitude is positive (south is negative) and east longitude is positive (west is negative).]
+[If you include a Bounding box indicate Label, Latitude North, Latitude South, Longitude West, Longitude East]
+   
+
+
+5. Funding sources that supported the collection of the data:
+[Include agency and grant number if applicable]
+
+{data['funding_statement'][0]}
+ """)
+
 
 with open('output_readme.txt', 'w') as readme:
     readme.write(template)
