@@ -5,6 +5,15 @@ from lxml import html
 import json
 import requests
 
+def getvalue( arg1, arg2 ):
+   # arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
+   if len(data[arg1]) > 0:
+   	   value = data[arg1][0]
+   elif len(data[arg1]) == 0:
+       value = arg2
+   return value;
+
+
 today = date.today()
 today = today.strftime('%Y-%m-%d')
 
@@ -141,6 +150,8 @@ if len(data['date_collected']) > 0:
 {data['date_collected'][0]}
     """)
 
+fundingstatement = getvalue('funding_statement','No funding statement')
+
 template = (
     f"""{template}
 
@@ -154,9 +165,11 @@ template = (
 5. Funding sources that supported the collection of the data:
 [Include agency and grant number if applicable]
 
-{data['funding_statement'][0]}
+{getvalue('funding_statement','No funding statement')}
  """)
 
+
+# Make a function that will check if the variable exists and brings the value. Modify the function so that it includes the option of loading ordered items. 
 
 with open('output_readme.txt', 'w') as readme:
     readme.write(template)
