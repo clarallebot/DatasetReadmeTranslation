@@ -5,13 +5,48 @@ from lxml import html
 import json
 import requests
 
+
+#def getvalue( arg1, arg2 ):
+#   # arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
+#    if len(data[arg1]) == 1:
+#   	    value = data[arg1][0]
+#    elif len(data[arg1]) == 0:
+#        value = arg2
+#    elif len(data[arg1]) == 2:
+#   	    value = arg2
+#    return value;
+
+
 def getvalue( arg1, arg2 ):
-   # arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
-   if len(data[arg1]) > 0:
-   	   value = data[arg1][0]
-   elif len(data[arg1]) == 0:
-       value = arg2
-   return value;
+	# arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
+    if len(data[arg1]) > 0:
+   	    value = data[arg1][0]
+    elif len(data[arg1]) == 0:
+        value = arg2
+    elif len(data[arg1]) > 1:
+    	# NOT TESTED make sure that this works!
+        nestedarg1 = "nested_ordered_"+arg1
+        temp = data[nestedarg1]
+        value = [None] * len(temp)
+        for x in temp:
+            value[int(x['index'][0])] = x[arg1][0]
+        # We need to add an option for not ordered too.
+    return value;
+
+
+
+#if len(data['abstract']) > 0:
+#  nestabstract = data['nested_ordered_abstract']
+#
+#  ordered_abstract = [None] * len(nestabstract)
+#  for x in nestabstract:
+#    ordered_abstract[int(x['index'][0])] = x['abstract'][0]
+#
+#  for x in ordered_abstract:
+#    template = (
+#  	f""" {template} 
+#{x}
+#    """)
 
 
 today = date.today()
@@ -119,20 +154,23 @@ ORCID:
 CONTEXTUAL INFORMATION
 -------------------
 
-1. Abstract for the dataset - REQUIRED"""
-)
-if len(data['abstract']) > 0:
-  nestabstract = data['nested_ordered_abstract']
+1. Abstract for the dataset - REQUIRED
 
-  ordered_abstract = [None] * len(nestabstract)
-  for x in nestabstract:
-    ordered_abstract[int(x['index'][0])] = x['abstract'][0]
+{getvalue('abstract','NA')}
 
-  for x in ordered_abstract:
-    template = (
-  	f""" {template} 
-{x}
-    """)
+""")
+#if len(data['abstract']) > 0:
+#  nestabstract = data['nested_ordered_abstract']
+#
+#  ordered_abstract = [None] * len(nestabstract)
+#  for x in nestabstract:
+#    ordered_abstract[int(x['index'][0])] = x['abstract'][0]
+#
+#  for x in ordered_abstract:
+#    template = (
+#  	f""" {template} 
+#{x}
+#    """)
 
 template = (
     f"""{template}
@@ -143,17 +181,7 @@ template = (
 3. Date of data collection:
 [single date or range of dates in format YYYY-MM-DD]
 
-""")
-if len(data['date_collected']) > 0:
-	template = (
-  	f""" {template} 
-{data['date_collected'][0]}
-    """)
-
-fundingstatement = getvalue('funding_statement','No funding statement')
-
-template = (
-    f"""{template}
+{getvalue('date_collected','NA')}
 
 4. Geographic location of data collection:
 [Location of the data collection.]
