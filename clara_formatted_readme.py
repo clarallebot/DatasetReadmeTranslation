@@ -5,6 +5,9 @@ from lxml import html
 import json
 import requests
 
+def printhola( texttoprint ):
+    print(texttoprint)
+
 
 #def getvalue( arg1, arg2 ):
 #   # arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
@@ -17,37 +20,42 @@ import requests
 #    return value;
 
 
-def getvalue( arg1, arg2 ):
+def getvalue( arg1, arg2, pre_text="", post_text="" ):
 	# arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
-    if len(data[arg1]) > 0:
-   	    value = data[arg1][0]
+    print(arg1)
+    if len(data[arg1]) == 1:
+        print("Length equal one")
+        value = data[arg1][0]
     elif len(data[arg1]) == 0:
+        print("Length equal zero")
         value = arg2
     elif len(data[arg1]) > 1:
-    	# NOT TESTED make sure that this works!
+        print("Length more than one")
         nestedarg1 = "nested_ordered_"+arg1
         temp = data[nestedarg1]
-        value = [None] * len(temp)
+        tempvalue = [None] * len(temp)
+        value = (f""" """)
         for x in temp:
-            value[int(x['index'][0])] = x[arg1][0]
+            tempvalue[int(x['index'][0])] = x[arg1][0]
+        for x in tempvalue:
+            value = (
+            f""" {value}
+{pre_text}{x} {post_text}
+    """
+)
+
         # We need to add an option for not ordered too.
     return value;
 
-
-
-#if len(data['abstract']) > 0:
-#  nestabstract = data['nested_ordered_abstract']
-#
-#  ordered_abstract = [None] * len(nestabstract)
-#  for x in nestabstract:
-#    ordered_abstract[int(x['index'][0])] = x['abstract'][0]
-#
-#  for x in ordered_abstract:
-#    template = (
-#  	f""" {template} 
-#{x}
-#    """)
-
+creatorposttext = (
+    f"""
+Institution:
+College, School or Department:
+Address:
+Email:
+ORCID:
+Role:
+ """)
 
 today = date.today()
 today = today.strftime('%Y-%m-%d')
@@ -84,61 +92,14 @@ GENERAL INFORMATION
 [ORCID is a persistent digital identifier for researchers. https://orcid.org/ We encourage researchers to get one, but it is optional. You may chose to use a different author identifier if you have one.]
 [Role: role of the author in the dataset. Consider using the CreDit taxonomy to describe these roles: http://credit.niso.org/contributor-roles-defined/]
 [Creators are mentioned when citing the dataset. Make sure that they coincide with the Creator field in the repository record.]
-    """)
+    
+{getvalue('creator','PLEASE FILL','Name: ',creatorposttext)}
 
-
-if len(data['creator']) > 0:
-  nestcreator = data['nested_ordered_creator']
-
-  ordered_creator = [None] * len(nestcreator)
-  for x in nestcreator:
-    ordered_creator[int(x['index'][0])] = x['creator'][0]
-
-  for x in ordered_creator:
-  	template = (
-  	f""" {template}
-Name:{x}
-Institution:
-College, School or Department:
-Address:
-Email:
-ORCID:
-Role:
-    """
-)
-
-template = (
-    f"""{template}
 3. Contributor information
 [Contributors are not authors, they are collaborators that have contributed somehow to the dataset. They are not mentioned when citing the dataset. Make sure that they coincide with the Contributor field in the repository record.]
-""")
 
-if len(data['contributor']) > 0:
-  nestcontributor = data['nested_ordered_contributor']
+{getvalue('contributor','No contributors','Name: ',creatorposttext)}
 
-  ordered_contributor = [None] * len(nestcontributor)
-  for x in nestcontributor:
-    ordered_contributor[int(x['index'][0])] = x['contributor'][0]
-
-  for x in ordered_contributor:
-  	template = (
-  	f""" {template}
-Name:{x}
-Institution:
-College, School or Department:
-Address:
-Email:
-ORCID:
-Role:
- """)
-
-elif len(data['contributor']) == 0:
-    template = (
-  	f""" {template} No contributors
-  	""")
-
-template = (
-    f"""{template}
 4. Contact Information - REQUIRED
 [Usually a creator, but may be somebody else. Consider adding more than one contact if the main contact is expected to change positions soon (e.g. a student expected to graduate)]
 
@@ -149,34 +110,16 @@ Address:
 Email:
 ORCID:
 
-
 -------------------
 CONTEXTUAL INFORMATION
 -------------------
 
 1. Abstract for the dataset - REQUIRED
 
-{getvalue('abstract','NA')}
+{getvalue('abstract','PLEASE FILL')}
 
-""")
-#if len(data['abstract']) > 0:
-#  nestabstract = data['nested_ordered_abstract']
-#
-#  ordered_abstract = [None] * len(nestabstract)
-#  for x in nestabstract:
-#    ordered_abstract[int(x['index'][0])] = x['abstract'][0]
-#
-#  for x in ordered_abstract:
-#    template = (
-#  	f""" {template} 
-#{x}
-#    """)
-
-template = (
-    f"""{template}
 2. Context of the research project that this dataset was collected for.
 [Any contextual information that will help to interpret the dataset. You can give details about the research questions that prompted the collection of this dataset. ]
-
 
 3. Date of data collection:
 [single date or range of dates in format YYYY-MM-DD]
@@ -188,7 +131,7 @@ template = (
 [If you include coordinates use format: "latitude, longitude" where latitude and longitude are preferably in fraction of degrees (a decimal number), not sexagesimal, and where north latitude is positive (south is negative) and east longitude is positive (west is negative).]
 [If you include a Bounding box indicate Label, Latitude North, Latitude South, Longitude West, Longitude East]
    
-
+NA
 
 5. Funding sources that supported the collection of the data:
 [Include agency and grant number if applicable]
