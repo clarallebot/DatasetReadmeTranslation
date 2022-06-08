@@ -9,18 +9,22 @@ today = today.strftime('%Y-%m-%d')
 with open('example_data.json') as json_file:
     data = json.load(json_file)
 
-# Pull label from Academic Affiliation URI to use in Creator - College, School, or Department
+# Pull label from Academic Affiliation URI
 affiliation_uri = data['academic_affiliation'][0]
 jsonld = 'http://opaquenamespace.org/ns/osuAcademicUnits.jsonld'
-response = requests.get(jsonld)
-affiliation_dict = response.json()
-affiliation_dict = affiliation_dict['@graph']
+affiliation_dict = requests.get(jsonld).json()['@graph']
 record = None
 for unit in affiliation_dict:
-    if unit['@id'] == affiliation_uri:
-        record = unit
-label_dict = record['rdfs:label']
-affiliation_label = label_dict['@value']
+ if unit['@id'] == affiliation_uri:
+  record = unit
+affiliation_label = record['rdfs:label']['@value']
+
+# Pull label from Location URI
+location_uri = data['based_near'][0]['id']
+geonameId = location_uri[location_uri.index('org/') + 4:-1]
+geo_json = 'http://www.geonames.org/getJSON?geonameId=' + geonameId + '&username=demo'
+geo_record = requests.get(geo_json).json()
+location_label = geo_record['toponymName']
 
 # Pull label from License URI
 license_uri = data['license'][0]
@@ -58,23 +62,50 @@ GENERAL INFORMATION
 
 1. Title of Dataset - REQUIRED
 {data['title'][0]}
-   
+
 2. Creator Information - REQUIRED
 [Fill in the names and information about the researchers that are considered authors of this dataset.]
 [ORCID is a persistent digital identifier for researchers. https://orcid.org/ We encourage researchers to get one, but it is optional. You may chose to use a different author identifier if you have one.]
 [Role: role of the author in the dataset. Consider using the CreDit taxonomy to describe these roles: http://credit.niso.org/contributor-roles-defined/]
 [Creators are mentioned when citing the dataset. Make sure that they coincide with the Creator field in the repository record.]
 
-Name: {data['creator'][0]}
-Institution:
-College, School or Department: {affiliation_label}
-Address:
-Email:
-ORCID:
-Role:
+...\n...\n...\n...
+    """)
 
+
+template = (
+    f""" {template}
+
+5. Publisher Information
+
+College, School or Department: 
+{affiliation_label}
+  """)
+
+geo_label = None
+for geo in data['nested_geo']:
+    if geo['label'] != []:
+        geo_label = geo['label'][0]
+    if geo['point'] != []:
+        geo_label = geo_label + ' (' + str(geo['point'][0]) + ')'
+    elif geo['bbox'][0] != []:
+        geo_label = geo_label + ' (' + str(geo['bbox'][0]) + ')'
+
+template = (
+    f""" {template}
+-------------------
+CONTEXTUAL INFORMATION
+-------------------
 ...\n...\n...\n...
 
+4. Geographic location of data collection:
+{location_label}
+{geo_label}
+
+    """)
+
+template = (
+    f""" {template}
 --------------------------
 SHARING/ACCESS INFORMATION
 --------------------------
@@ -84,9 +115,9 @@ This work is licensed under a {license_label} license {license_id}. More informa
 The copyright status for this work is {rights_label}. More information: {rights_uri}
 
 ...\n...\n...\n...
-    """
-    )
 
+    """) 
+ 
 with open('output_readme.txt', 'w') as readme:
     readme.write(template)
 
