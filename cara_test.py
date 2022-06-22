@@ -6,39 +6,53 @@ import requests
 today = date.today()
 today = today.strftime('%Y-%m-%d')
 
-with open('example_data.json') as json_file:
+with open('example_data2_pp.json') as json_file:
     data = json.load(json_file)
 
-# Pull label from Academic Affiliation URI
-affiliation_uri = data['academic_affiliation'][0]
-jsonld = 'http://opaquenamespace.org/ns/osuAcademicUnits.jsonld'
-affiliation_dict = requests.get(jsonld).json()['@graph']
-record = None
-for unit in affiliation_dict:
- if unit['@id'] == affiliation_uri:
-  record = unit
-affiliation_label = record['rdfs:label']['@value']
 
-# Pull label from Location URI
-location_uri = data['based_near'][0]['id']
-geonameId = location_uri[location_uri.index('org/') + 4:-1]
-geo_json = 'http://www.geonames.org/getJSON?geonameId=' + geonameId + '&username=demo'
-geo_record = requests.get(geo_json).json()
-location_label = geo_record['toponymName']
+def getvalue( arg1, arg2, pre_text="", post_text="" ):
+    # arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
+    print(arg1)
+    if len(data[arg1]) == 1:
+        print("Length equal one")
+        value = data[arg1][0]
+    elif len(data[arg1]) == 0:
+        print("Length equal zero")
+        value = arg2
+    elif len(data[arg1]) > 1:
+        print("Length more than one")
+        nestedarg1 = "nested_ordered_"+arg1
+        temp = data[nestedarg1]
+        tempvalue = [None] * len(temp)
+        value = (f""" """)
+        for x in temp:
+            tempvalue[int(x['index'][0])] = x[arg1][0]
+        for x in tempvalue:
+            value = (
+            f""" {value}
+{pre_text}{x} {post_text}
+    """
+)
+        # We need to add an option for not ordered too.
+    return value;
 
-# Pull label from License URI
-license_uri = data['license'][0]
-license_page = requests.get(license_uri)
-license_tree = html.fromstring(license_page.content)
-license_label = "Creative Commons " + license_tree.xpath('//span[@class="cc-license-title"]/text()')[0]
-license_id = license_tree.xpath('//span[@class="cc-license-identifier"]/text()')[0]
-license_id = license_id.replace('\n','')
 
-# Pull label from Rights Statement URI
-rights_uri = data['rights_statement'][0]
-rights_page = requests.get(rights_uri)
-rights_tree = html.fromstring(rights_page.content)
-rights_label = rights_tree.xpath('//div[@class="statement-textcolumn"]/h1/text()')[0]
+def getlabel(fieldname, xpath, pre_text=""):
+    # fieldname is the name of the field where the URI is located
+    # xpath is the path to the location of the label in the LD source page
+    print(fieldname)
+    if len(data[fieldname]) == 1:
+        print("Length equal one")
+        uri = data[fieldname][0]
+        page = requests.get(uri)
+        tree = html.fromstring(page.content)
+        label = pre_text + tree.xpath(xpath)[0].replace('\n','')
+    else:
+        print("Length not equal to one")
+        label = "No label available at this time"
+    return label;
+
+
 
 template = (
     f"""
@@ -72,6 +86,15 @@ GENERAL INFORMATION
 ...\n...\n...\n...
     """)
 
+# Pull label from Academic Affiliation URI
+affiliation_uri = data['academic_affiliation'][0]
+jsonld = 'http://opaquenamespace.org/ns/osuAcademicUnits.jsonld'
+affiliation_dict = requests.get(jsonld).json()['@graph']
+record = None
+for unit in affiliation_dict:
+ if unit['@id'] == affiliation_uri:
+  record = unit
+affiliation_label = record['rdfs:label']['@value']
 
 template = (
     f""" {template}
@@ -81,6 +104,14 @@ template = (
 College, School or Department: 
 {affiliation_label}
   """)
+
+
+# Pull label from Location URI
+location_uri = data['based_near'][0]['id']
+geonameId = location_uri[location_uri.index('org/') + 4:-1]
+geo_json = 'http://www.geonames.org/getJSON?geonameId=' + geonameId + '&username=demo'
+geo_record = requests.get(geo_json).json()
+location_label = geo_record['toponymName']
 
 geo_label = None
 for geo in data['nested_geo']:
@@ -104,6 +135,20 @@ CONTEXTUAL INFORMATION
 
     """)
 
+# Pull label from License URI
+license_uri = data['license'][0]
+license_page = requests.get(license_uri)
+license_tree = html.fromstring(license_page.content)
+license_label = "Creative Commons " + license_tree.xpath('//span[@class="cc-license-title"]/text()')[0]
+license_id = license_tree.xpath('//span[@class="cc-license-identifier"]/text()')[0].replace('\n','')
+
+
+# Pull label from Rights Statement URI
+rights_uri = data['rights_statement'][0]
+rights_page = requests.get(rights_uri)
+rights_tree = html.fromstring(rights_page.content)
+rights_label = rights_tree.xpath('//div[@class="statement-textcolumn"]/h1/text()')[0]
+
 template = (
     f""" {template}
 --------------------------
@@ -111,8 +156,8 @@ SHARING/ACCESS INFORMATION
 --------------------------
 
 1. Licenses/restrictions placed on the data:
-This work is licensed under a {license_label} license {license_id}. More information: {license_uri}
-The copyright status for this work is {rights_label}. More information: {rights_uri}
+This work is licensed under a {getlabel('license', '//span[@class="cc-license-title"]/text()', 'Creative Commons ')} license {getlabel('license', '//span[@class="cc-license-identifier"]/text()')}. More information: {getvalue('license','Not applicable')}
+The copyright status for this work is {getlabel('rights_statement', '//div[@class="statement-textcolumn"]/h1/text()', '')}. More information: {getvalue('rights_statement','oops')}
 
 ...\n...\n...\n...
 
