@@ -5,21 +5,6 @@ from lxml import html
 import json
 import requests
 
-def printhola( texttoprint ):
-    print(texttoprint)
-
-
-#def getvalue( arg1, arg2 ):
-#   # arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
-#    if len(data[arg1]) == 1:
-#   	    value = data[arg1][0]
-#    elif len(data[arg1]) == 0:
-#        value = arg2
-#    elif len(data[arg1]) == 2:
-#   	    value = arg2
-#    return value;
-
-
 def getvalue( arg1, arg2, pre_text="", post_text="" ):
 	# arg1 is a string, the name of the variable. arg2 is the value that the result should have if it is not defined  "
     print(arg1)
@@ -32,19 +17,24 @@ def getvalue( arg1, arg2, pre_text="", post_text="" ):
     elif len(data[arg1]) > 1:
         print("Length more than one")
         nestedarg1 = "nested_ordered_"+arg1
-        temp = data[nestedarg1]
-        tempvalue = [None] * len(temp)
-        value = (f""" """)
-        for x in temp:
-            tempvalue[int(x['index'][0])] = x[arg1][0]
-        for x in tempvalue:
-            value = (
-            f""" {value}
+        if nestedarg1 in data.keys():
+            print("It is an ordered argument")
+            temp = data[nestedarg1]
+            tempvalue = [None] * len(temp)
+            value = (f""" """)
+            for x in temp:
+                tempvalue[int(x['index'][0])] = x[arg1][0]
+            for x in tempvalue:
+                value = (
+                f""" {value}
 {pre_text}{x} {post_text}
     """
 )
-
-        # We need to add an option for not ordered too.
+        else:
+            print("It is not an ordered argument")
+            value = data[arg1]
+        # Need to add loop into the not ordered argument section
+        # Is alt_title ordered or not?
     return value;
 
 creatorposttext = (
@@ -86,6 +76,8 @@ GENERAL INFORMATION
 
 1. Title of Dataset - REQUIRED
 {data['title'][0]}
+
+{getvalue('alt_title','')}
 
 2. Creator Information - REQUIRED
 [Fill in the names and information about the researchers that are considered authors of this dataset.]
@@ -137,6 +129,10 @@ NA
 [Include agency and grant number if applicable]
 
 {getvalue('funding_statement','No funding statement')}
+
+
+{getvalue('nested_related_items','NA')}
+
  """)
 
 
